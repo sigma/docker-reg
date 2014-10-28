@@ -45,13 +45,16 @@ class Register(object):
         return "/services/%s/%s" % (self._service, self._container)
             
     def setKey(self):
-        port_pros = self._docker.port("ipxe.service", self._port)[0]
-        host, port = port_props['HostIp'], port_props['HostPort']
-        obj = {'host': host, 'port': int(port)}
-        obj.update(self._rest)
+        try:
+            port_props = self._docker.port("ipxe.service", self._port)[0]
+            host, port = port_props['HostIp'], port_props['HostPort']
+            obj = {'host': host, 'port': int(port)}
+            obj.update(self._rest)
 
-        json_obj = json.dumps(obj)
-        self._etcd.write(self._getKey(), json_obj, ttl=5)
+            json_obj = json.dumps(obj)
+            self._etcd.write(self._getKey(), json_obj, ttl=5)
+        except:
+            print("Failed to set key %s" % (self._getKey()))
 
 
 def getParser():
