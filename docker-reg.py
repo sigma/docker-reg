@@ -5,7 +5,6 @@ import argparse
 import json
 import os
 import signal
-import subprocess
 import time
 
 import docker
@@ -43,7 +42,7 @@ class Register(object):
 
     def _getKey(self):
         return "/services/%s/%s" % (self._service, self._container)
-            
+
     def setKey(self):
         try:
             port_props = self._docker.port(self._container, self._port)[0]
@@ -66,7 +65,7 @@ def getParser():
     parser.add_argument("rest", nargs='*')
     return parser
 
-    
+
 def main(args):
     rest = {}
     for val in args.rest:
